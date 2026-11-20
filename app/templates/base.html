@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Keitaro Wrapper{% endblock %}</title>
+  <link rel="stylesheet" href="/static/css/styles.css?v=4" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">Keitaro Wrapper</div>
+      <nav class="nav">
+        <a href="/" class="{% if request.url.path == '/' %}active{% endif %}">Создатель кампаний</a>
+        <a href="/editor" class="{% if request.url.path.startswith('/editor') %}active{% endif %}">Редактор кампаний</a>
+        <a href="/admin" class="{% if request.url.path.startswith('/admin') %}active{% endif %}">Настройки</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <div id="toast" class="toast hidden"></div>
+  <script src="/static/js/common.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

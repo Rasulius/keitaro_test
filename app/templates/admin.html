@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Настройки — Keitaro Wrapper{% endblock %}
+{% block content %}
+<section class="card">
+  <div class="page-header">
+    <h1>Настройки приложения</h1>
+    <p class="muted">Укажите параметры подключения к Keitaro и значения по умолчанию. Данные сохраняются локально в файле <code>runtime_config.json</code> (в корне проекта) и не должны попадать в Git. Поля, оставленные пустыми, не затирают уже сохранённый API-ключ.</p>
+  </div>
+
+  <form id="settings-form" class="form">
+    <div class="form-section">
+      <div class="form-section-header">
+        <div class="form-section-title">Подключение к Keitaro</div>
+        <div class="field-hint">Обязательны для работы создателя/редактора кампаний</div>
+      </div>
+      <div class="form-grid">
+        <div class="field span-6">
+          <label class="field-label" for="keitaro_url">Keitaro URL <span class="req">*</span></label>
+          <input id="keitaro_url" type="url" name="keitaro_url" placeholder="https://your-tracker-domain.com" autocomplete="off" />
+          <div class="field-hint">Базовый URL трекера Keitaro (Admin API)</div>
+        </div>
+        <div class="field span-6">
+          <label class="field-label" for="keitaro_api_key">Admin API Key <span class="req">*</span></label>
+          <input id="keitaro_api_key" type="password" name="keitaro_api_key" placeholder="Введите новый API-ключ" autocomplete="new-password" />
+          <div id="api-key-status" class="field-hint">Ключ не задан</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-header">
+        <div class="form-section-title">Значения по умолчанию</div>
+        <div class="field-hint">Используются при создании кампаний и в интерфейсе (можно переопределять в форме)</div>
+      </div>
+      <div class="form-grid">
+        <div class="field span-4">
+          <label class="field-label" for="campaign_name_prefix">Префикс имени кампании</label>
+          <input id="campaign_name_prefix" type="text" name="campaign_name_prefix" placeholder="test_user_" autocomplete="off" />
+          <div class="field-hint">Например: <code>test_ivanov_</code></div>
+        </div>
+        <div class="field span-4">
+          <label class="field-label" for="google_redirect_url">URL для гео-потока (Google)</label>
+          <input id="google_redirect_url" type="url" name="google_redirect_url" placeholder="https://google.com" autocomplete="off" />
+        </div>
+        <div class="field span-4">
+          <label class="field-label" for="default_offer_id">ID оффера по умолчанию</label>
+          <input id="default_offer_id" type="number" name="default_offer_id" min="1" placeholder="Не задано" />
+        </div>
+
+        <div class="field span-4">
+          <label class="field-label" for="default_domain_id">Domain ID по умолчанию</label>
+          <input id="default_domain_id" type="number" name="default_domain_id" min="1" placeholder="Не задано" />
+        </div>
+        <div class="field span-4">
+          <label class="field-label" for="default_group_id">Group ID по умолчанию</label>
+          <input id="default_group_id" type="number" name="default_group_id" min="1" placeholder="Не задано" />
+        </div>
+        <div class="field span-4">
+          <label class="field-label" for="default_traffic_source_id">Traffic Source ID по умолчанию</label>
+          <input id="default_traffic_source_id" type="number" name="default_traffic_source_id" min="1" placeholder="Не задано" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions spread">
+      <div class="form-note">После сохранения настройки применяются сразу (перезапуск нужен только при смене <code>DATABASE_URL</code>, если вы меняете его вручную в окружении).</div>
+      <button type="submit" class="btn primary" id="save-settings-btn">Сохранить настройки</button>
+    </div>
+  </form>
+
+  <div id="settings-result" class="result hidden"></div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/admin.js?v=1"></script>
+{% endblock %}

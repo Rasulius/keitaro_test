@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Создатель кампаний — Keitaro Wrapper{% endblock %}
+{% block content %}
+<section class="card">
+  <div class="page-header">
+    <h1>Создатель кампаний</h1>
+    <p class="muted">Создаёт кампанию в Keitaro с двумя потоками: <strong>страна → Google</strong> и <strong>остальные → выбранный оффер</strong>. Поля выровнены по сетке, обязательные параметры отмечены.</p>
+  </div>
+
+  <form id="create-campaign-form" class="form">
+    <div class="form-section">
+      <div class="form-section-header">
+        <div class="form-section-title">Основные параметры</div>
+        <div class="field-hint">Нужно для создания кампании и двух потоков</div>
+      </div>
+      <div class="form-grid">
+        <div class="field span-6">
+          <label class="field-label" for="name">Название кампании <span class="req">*</span></label>
+          <input id="name" type="text" name="name" placeholder="campaign1" value="" required autocomplete="off" data-autogenerate="campaign" />
+          <div class="field-hint">К имени автоматически добавится префикс: <code>{{ default_prefix }}</code>. По умолчанию подставляется новое имя (можно изменить).</div>
+        </div>
+
+        <div class="field span-3">
+          <label class="field-label" for="country_code">Гео-код страны <span class="req">*</span></label>
+          <input id="country_code" type="text" name="country_code" value="AU" placeholder="AU" required maxlength="8" autocomplete="off" />
+          <div class="field-hint">По умолчанию: AU (Австралия, как в примере ТЗ). Можно указать другой код, например: US, DE</div>
+        </div>
+
+        <div class="field span-3">
+          <label class="field-label" for="offer_id">ID оффера (Keitaro) <span class="req">*</span></label>
+          <input id="offer_id" type="number" name="offer_id" value="{{ default_offer_id or '' }}" placeholder="123" required min="1" />
+          <div class="field-hint">Оффер для потока по умолчанию</div>
+        </div>
+
+        <div class="field span-12">
+          <label class="field-label" for="google_url">URL редиректа для гео-потока (Google)</label>
+          <input id="google_url" type="url" name="google_url" value="{{ default_google_url }}" placeholder="https://google.com" />
+          <div class="field-hint">Поток 1: пользователи из указанной страны будут перенаправлены на этот URL</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-header">
+        <div class="form-section-title">Настройки Keitaro</div>
+        <div class="field-hint">Выберите домен, группу и источник по названию — ID подставится автоматически (поле ID только для чтения)</div>
+      </div>
+      <div class="form-grid">
+        <div class="field span-8">
+          <label class="field-label" for="domain_select">Домен</label>
+          <select id="domain_select" data-target="domain_id" data-placeholder="— выберите домен —">
+            <option value="">Загрузка доменов...</option>
+          </select>
+          <div class="field-hint">Выбор по названию из Keitaro</div>
+        </div>
+        <div class="field span-4">
+          <label class="field-label" for="domain_id">Domain ID</label>
+          <input id="domain_id" type="number" name="domain_id" value="{{ default_domain_id or '' }}" min="1" placeholder="—" readonly />
+          <div class="field-hint">Подставляется автоматически</div>
+        </div>
+
+        <div class="field span-8">
+          <label class="field-label" for="group_select">Группа кампаний</label>
+          <select id="group_select" data-target="group_id" data-placeholder="— выберите группу —">
+            <option value="">Загрузка групп...</option>
+          </select>
+          <div class="field-hint">Выбор по названию из Keitaro</div>
+        </div>
+        <div class="field span-4">
+          <label class="field-label" for="group_id">Group ID</label>
+          <input id="group_id" type="number" name="group_id" value="{{ default_group_id or '' }}" min="1" placeholder="—" readonly />
+          <div class="field-hint">Подставляется автоматически</div>
+        </div>
+
+        <div class="field span-8">
+          <label class="field-label" for="traffic_source_select">Источник трафика</label>
+          <select id="traffic_source_select" data-target="traffic_source_id" data-placeholder="— выберите источник —">
+            <option value="">Загрузка источников...</option>
+          </select>
+          <div class="field-hint">Выбор по названию из Keitaro</div>
+        </div>
+        <div class="field span-4">
+          <label class="field-label" for="traffic_source_id">Traffic Source ID</label>
+          <input id="traffic_source_id" type="number" name="traffic_source_id" value="{{ default_traffic_source_id or '' }}" min="1" placeholder="—" readonly />
+          <div class="field-hint">Подставляется автоматически</div>
+        </div>
+      </div>
+      <div id="refs-status" class="field-hint" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="form-actions spread">
+      <div class="form-note">После создания будет доступна кнопка перехода в редактор кампании.</div>
+      <button type="submit" class="btn primary" id="create-btn">Создать кампанию</button>
+    </div>
+  </form>
+
+  <div id="create-result" class="result hidden"></div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/creator.js?v=5"></script>
+{% endblock %}

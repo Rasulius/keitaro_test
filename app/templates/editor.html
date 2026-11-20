@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Редактор кампании — Keitaro Wrapper{% endblock %}
+{% block content %}
+<section class="card">
+  <div class="page-header">
+    <h1>Редактор кампании</h1>
+    <p class="muted">Загрузите потоки кампании, редактируйте офферы и веса в черновике, затем публикуйте изменения в Keitaro (<strong>Push to KT</strong>) или отменяйте (<strong>Cancel</strong>).</p>
+  </div>
+
+  <div class="toolbar">
+    <div class="field narrow">
+      <label class="field-label" for="campaign-id">ID кампании (Keitaro)</label>
+      <input type="number" id="campaign-id" placeholder="Например: 12" min="1" />
+    </div>
+    <button id="load-state-btn" class="btn">Открыть состояние</button>
+    <button id="fetch-btn" class="btn primary">Fetch Streams</button>
+  </div>
+
+  <div class="toolbar">
+    <div class="field">
+      <label class="field-label" for="campaign-filter-q">Фильтр кампаний по имени</label>
+      <input type="text" id="campaign-filter-q" value="{{ default_campaign_filter }}" placeholder="например: test_ivanov" autocomplete="off" />
+      <div class="field-hint">По умолчанию используется фильтр: <code>{{ default_campaign_filter }}</code></div>
+    </div>
+    <div class="field compact">
+      <label class="field-label" for="campaign-filter-active">Статус</label>
+      <label class="check-control" for="campaign-filter-active">
+        <input type="checkbox" id="campaign-filter-active" {% if default_active_only %}checked{% endif %} />
+        <span>Только активные</span>
+      </label>
+    </div>
+    <div class="field">
+      <label class="field-label" for="campaign-select">Быстрый выбор из списка</label>
+      <select id="campaign-select" class="campaign-select">
+        <option value="">— загрузка списка —</option>
+      </select>
+      <div class="field-hint">Список учитывает фильтр и статус</div>
+    </div>
+    <button id="refresh-campaigns-btn" class="btn">Обновить список</button>
+  </div>
+
+  <div id="campaign-info" class="campaign-info muted"></div>
+  <div id="streams-container" class="streams-container"></div>
+</section>
+
+<div id="add-offer-modal" class="modal hidden">
+  <div class="modal-content card">
+    <div class="modal-header">
+      <h3>Добавить оффер в поток</h3>
+      <button class="btn ghost" id="close-modal-btn" title="Закрыть">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="search-row">
+        <div class="field">
+          <label class="field-label" for="offer-search">Поиск оффера (ID или название)</label>
+          <input type="text" id="offer-search" placeholder="Введите ID или часть названия" autocomplete="off" />
+          <div class="field-hint">Поиск выполняется через API обёртки → Keitaro</div>
+        </div>
+        <button id="search-offers-btn" class="btn primary">Найти</button>
+      </div>
+      <div id="offer-search-results" class="offer-search-results"></div>
+    </div>
+    <div class="modal-footer muted">Выберите оффер из результатов, чтобы добавить его в черновик потока (поток станет жёлтым до публикации).</div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/editor.js?v=2"></script>
+{% endblock %}
